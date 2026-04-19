@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acu Shafi Clinic - Appointment Booking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style2.css">
+    <link rel="stylesheet" href="../css/style3.css">
+    <style>
+        body {
+            background-color: var(--bg-tertiary);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .booking-container {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            width: 100%;
+            max-width: 540px;
+            box-shadow: var(--shadow-md);
+            margin-top: 20px;
+        }
+
+        .booking-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .booking-header i {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .booking-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .booking-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .form-section {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+            border: 1px solid var(--border-light);
+        }
+
+        .form-section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-row>div {
+            flex: 1;
+        }
+
+        .slot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .slot-btn {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 12px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .slot-btn:hover:not(.full) {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: var(--primary-light);
+        }
+
+        .slot-btn.selected {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.3);
+        }
+
+        .slot-btn.full {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            opacity: 0.6;
+            border-color: var(--border-light) !important;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .clinic-closed-msg {
+            background: var(--error-light);
+            color: var(--error);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .clinic-closed-msg i {
+            font-size: 32px;
+        }
+
+        .radio-group-boxes {
+            display: flex;
+            gap: 12px;
+        }
+
+        .radio-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .radio-box input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .radio-box label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 10px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .radio-box label i {
+            font-size: 24px;
+        }
+
+        .radio-box input:checked+label {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .captcha-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-secondary);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+        }
+
+        #captchaQuestion {
+            font-weight: 600;
+            font-size: 18px;
+            background: var(--bg-tertiary);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+
+<body class="theme-light">
+
+    <div class="booking-container">
+        <div class="booking-header">
+            <i class="ph ph-heartbeat"></i>
+            <h1>Acu Shafi Clinic</h1>
+            <p>Secure Online Appointment Booking</p>
+        </div>
+
+        <form id="bookingForm">
+            <!-- Warning/Block Container -->
+            <div id="protectionWarning" class="clinic-closed-msg hidden"
+                style="background: var(--warning-light) !important; color: var(--warning) !important; border-color: rgba(234, 179, 8, 0.3) !important; margin-bottom: 20px;">
+                <i class="ph ph-warning-circle"></i>
+                <div style="text-align: center;">
+                    <strong id="protectionWarningTitle">Warning</strong>
+                    <p id="protectionWarningText" style="font-size: 14px; margin-top: 4px;"></p>
+                </div>
+            </div>
+
+            <!-- Patient Information -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="ph ph-user"></i> Patient Details
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="patientId">Patient ID (Optional - if already registered)</label>
+                    <input type="text" id="patientId" class="form-control" placeholder="e.g. ACU-0001">
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="patientName">Full Name <span class="text-error">*</span></label>
+                    <input type="text" id="patientName" class="form-control" required placeholder="Enter patient name">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="patientAge">Age <span class="text-error">*</span></label>
+                        <input type="number" id="patientAge" class="form-control" required min="1" max="120"
+                            placeholder="Age">
+                    </div>
+                    <div class="form-group">
+                        <label for="patientGender">Gender <span class="text-error">*</span></label>
+                        <select id="patientGender" class="form-control" required>
+                            <option value="">Select...</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="patientLocation">Location <span class="text-error">*</span></label>
+                    <input type="text" id="patientLocation" class="form-control" required placeholder="City or Area">
+                </div>
+
+                <div class="form-group">
+                    <label for="patientPhone">Phone Number <span class="text-error">*</span></label>
+                    <input type="tel" id="patientPhone" class="form-control" required pattern="[0-9]{10}"
+                        placeholder="10-digit mobile number">
+                    <small class="text-muted">Will be used for booking confirmation</small>
+                </div>
+            </div>
+
+            <!-- Treatment & Schedule -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="ph ph-calendar-plus"></i> Appointment Details
+                </div>
+
+                <div class="form-group mb-4">
+                    <label>Treatment Type <span class="text-error">*</span></label>
+                    <div class="radio-group-boxes mt-2">
+                        <div class="radio-box">
+                            <input type="radio" name="treatmentType" id="typeClinic" value="Clinic Visit" checked>
+                            <label for="typeClinic">
+                                <i class="ph ph-buildings"></i>
+                                Clinic Visit
+                            </label>
+                        </div>
+                        <div class="radio-box">
+                            <input type="radio" name="treatmentType" id="typeOnline" value="Online Consultation">
+                            <label for="typeOnline">
+                                <i class="ph ph-video-camera"></i>
+                                Online Consultation
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-4" id="clinicSelectionGroup">
+                    <label>Select Clinic <span class="text-error">*</span></label>
+                    <div class="radio-group-boxes mt-2">
+                        <div class="radio-box">
+                            <input type="radio" name="clinicLocation" id="clinicParad" value="Parad Clinic" checked>
+                            <label for="clinicParad">
+                                <i class="ph ph-map-pin"></i>
+                                Parad Clinic
+                                <small style="font-weight:normal; opacity:0.8">Panoor Area</small>
+                            </label>
+                        </div>
+                        <div class="radio-box">
+                            <input type="radio" name="clinicLocation" id="clinicManantheri" value="Manantheri Clinic">
+                            <label for="clinicManantheri">
+                                <i class="ph ph-map-pin"></i>
+                                Manantheri Clinic
+                                <!-- Empty small to match height -->
+                                <small style="font-weight:normal; opacity:0">&nbsp;</small>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="bookingDate">Select Date <span class="text-error">*</span></label>
+                    <input type="date" id="bookingDate" class="form-control" required>
+                </div>
+
+                <!-- Scheduling Output -->
+                <div id="scheduleContainer">
+                    <label>Available Time Slots <span class="text-error">*</span></label>
+
+                    <div id="slotsLoader" class="text-center py-3 hidden">
+                        <i class="ph ph-spinner-gap spin" style="font-size: 24px; color: var(--primary-color);"></i>
+                        <p class="mt-2 text-muted">Checking availability...</p>
+                    </div>
+
+                    <div id="clinicClosedMsg" class="clinic-closed-msg hidden">
+                        <i class="ph ph-calendar-x"></i>
+                        <div>
+                            <strong>Today clinic closed</strong>
+                            <p>Please select another date for booking.</p>
+                        </div>
+                    </div>
+
+                    <div id="slotsGrid" class="slot-grid">
+                        <!-- Slots injected dynamically -->
+                    </div>
+
+                    <p id="noSlotsMsg" class="text-muted mt-2 hidden text-center py-3">No slots available for selected
+                        date/clinic.</p>
+
+                    <input type="hidden" id="selectedTime" required>
+                </div>
+            </div>
+
+            <!-- Security & Submit -->
+            <div class="form-section">
+                <div class="form-section-title">
+                    <i class="ph ph-shield-check"></i> Security Verification
+                </div>
+
+                <div class="captcha-box mb-3">
+                    <span id="captchaQuestion">? + ?</span>
+                    <input type="number" id="captchaAnswer" class="form-control" required placeholder="Enter sum"
+                        style="max-width: 150px;">
+                </div>
+
+                <button type="submit" class="primary-btn w-100 mt-2 p-3 text-lg" id="submitBookingBtn">
+                    Confirm Booking Request
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal-overlay hidden" style="align-items:center; justify-content:center;">
+        <div class="modal-content text-center p-4">
+            <i class="ph ph-check-circle text-success" style="font-size: 64px;"></i>
+            <h2 class="mt-3 mb-2">Booking Requested!</h2>
+            <p class="text-muted mb-4">Your appointment request has been submitted successfully to the clinic. You will
+                receive a confirmation shortly.</p>
+            <div class="bg-secondary p-3 rounded mb-4" style="text-align: left;">
+                <p class="mb-1"><strong>Patient:</strong> <span id="successName"></span></p>
+                <p class="mb-1"><strong>Location:</strong> <span id="successClinic"></span></p>
+                <p class="mb-0"><strong>Time:</strong> <span id="successTime"></span></p>
+            </div>
+            <button class="primary-btn w-100" onclick="window.location.reload()">Book Another</button>
+        </div>
+    </div>
+
+    <!-- Deposit Modal (Phase-21) -->
+    <div id="depositModal" class="modal-overlay hidden" style="align-items:center; justify-content:center;">
+        <div class="modal-content text-center p-4">
+            <i class="ph ph-wallet text-primary" style="font-size: 56px; color: var(--primary-color);"></i>
+            <h2 class="mt-3 mb-2">Booking Deposit Required</h2>
+            <p class="text-muted mb-3">To secure your time slot and prevent fake bookings, a small deposit is required.
+            </p>
+
+            <div class="bg-secondary p-3 rounded mb-4"
+                style="text-align: left; background: var(--bg-tertiary); border: 1px solid var(--border-light);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span class="text-secondary">Consultation Type:</span>
+                    <strong id="depositType">Clinic Visit</strong>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; font-size: 18px; padding-top: 8px; border-top: 1px dashed var(--border-color);">
+                    <span class="text-secondary">Amount Payable:</span>
+                    <strong id="depositAmount" class="text-primary">₹50</strong>
+                </div>
+            </div>
+
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">
+                Note: This deposit will be adjusted against your final bill. Unpaid slots will expire in 10 minutes.
+            </p>
+
+            <button type="button" id="payDepositBtn" class="primary-btn w-100 p-3 text-lg mb-2">Pay Deposit Now</button>
+            <button type="button" id="cancelDepositBtn" class="secondary-btn w-100" style="border: none;">Cancel
+                Booking</button>
+        </div>
+    </div>
+
+    <!-- Global Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script type="module" src="../js/booking.js"></script>
+</body>
+
+</html>

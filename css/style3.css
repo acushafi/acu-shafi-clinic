@@ -1,0 +1,211 @@
+/* ==========================================================================
+   Autocomplete & Chips (Smart Points)
+   ========================================================================== */
+.autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-md);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    margin-top: 4px;
+}
+
+.ac-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.ac-item.highlighted,
+.ac-item:hover {
+    background-color: var(--brand-primary-light);
+    color: var(--brand-primary);
+    font-weight: 500;
+}
+
+.ac-section-header {
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background-color: var(--bg-surface);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border-color);
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.ac-section-header:first-child {
+    margin-top: 0;
+}
+
+.ac-empty {
+    padding: 10px 14px;
+    color: var(--text-tertiary);
+    font-style: italic;
+    font-size: 0.85rem;
+}
+
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--bg-surface-hover);
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.chip-remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: transparent;
+    color: var(--text-tertiary);
+    transition: all var(--transition-fast);
+}
+
+.chip-remove:hover {
+    background-color: var(--error);
+    color: white;
+}
+
+/* ==========================================================================
+   Audio Recorder Styling
+   ========================================================================== */
+.audio-recorder-panel {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: 16px;
+    background-color: var(--bg-surface-hover);
+    margin-top: 16px;
+}
+
+.recorder-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.mic-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--brand-primary);
+    color: white;
+    font-size: 24px;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+}
+
+.mic-btn.recording {
+    background-color: var(--error);
+    animation: pulse-red 1.5s infinite;
+}
+
+@keyframes pulse-red {
+    0% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+}
+
+.timer-display {
+    font-family: monospace;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* ==========================================================================
+   Phase-6C Component Styling (Follow-up chips, etc.)
+   ========================================================================== */
+.btn-chip {
+    padding: 6px 12px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-surface);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btn-chip:hover {
+    background-color: var(--bg-surface-hover);
+    border-color: var(--brand-primary-light);
+}
+
+.btn-chip.active-chip {
+    background-color: var(--brand-primary);
+    color: white;
+    border-color: var(--brand-primary);
+    font-weight: 500;
+}
+
+.btn-quick-imp {
+    padding: 4px 10px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-surface);
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.btn-quick-imp:hover {
+    background-color: var(--bg-surface-hover);
+    color: var(--brand-primary);
+}
+
+.imp-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    margin-top: 8px;
+    height: 6px;
+    background: var(--border-color);
+    border-radius: 4px;
+    outline: none;
+}
+
+.imp-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--brand-primary);
+    cursor: pointer;
+}
